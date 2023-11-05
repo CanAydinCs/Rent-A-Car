@@ -1,0 +1,7 @@
+kodlama\io\rentACar\dataAccess\abstracts\BrandRepository.class
+kodlama\io\rentACar\RentACarApplication.class
+kodlama\io\rentACar\entities\concretes\Brand.class
+kodlama\io\rentACar\dataAccess\concretes\InMemoryBrandRepository.class
+kodlama\io\rentACar\business\abstracts\BrandService.class
+kodlama\io\rentACar\webApi\Controllers\BrandsController.class
+kodlama\io\rentACar\business\concretes\BrandManager.class
