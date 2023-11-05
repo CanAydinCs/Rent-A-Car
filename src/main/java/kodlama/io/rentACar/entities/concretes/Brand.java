@@ -1,27 +1,27 @@
 package kodlama.io.rentACar.entities.concretes;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Table(name = "brands")
+@Data //@Getter ile @Setter'ın birleşimi
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Brand {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    
+    @Column(name = "name")
     private String name;
-
-    public Brand(){
-    }
-    public Brand(int _id, String _name){
-        id = _id;
-        name = _name;
-    }
-
-    public String getName(){
-        return name;
-    }
-    public void setName(String _name){
-        name = _name;
-    }
-
-    public int getId(){
-        return id;
-    }
-    public void setId(int _id){
-        id = _id;
-    }
 }
