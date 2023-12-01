@@ -16,21 +16,20 @@ import kodlama.io.rentACar.core.utilities.exceptions.ProblemDetails;
 @RestControllerAdvice
 public class RentACarApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RentACarApplication.class, args); 
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RentACarApplication.class, args);
+    }
 
-	@ExceptionHandler
-	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	public ProblemDetails handleBusinessException(BusinessException exception){
-		ProblemDetails problem = new ProblemDetails(exception.getMessage());
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleBusinessException(BusinessException exception){
+        ProblemDetails problem = new ProblemDetails(exception.getMessage());
 
-		return problem;
-	}
+        return problem;
+    }
 
-	//Bean gerekli çünkü ModelMapper birisi ihtiyaç duyduğunda ModelMapper'ın anotasyonu olmadığı için oluşturur
-	@Bean
-	public ModelMapper getModelMapper(){
-		return new ModelMapper();
-	}
+    @Bean
+    public ModelMapper getModelMapper(){
+        return new ModelMapper();
+    }
 }

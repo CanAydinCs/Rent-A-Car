@@ -1,0 +1,16 @@
+{
+  "productionMode": false,
+  "eagerServerLoad": false,
+  "npmFolder": "C:\\CampSpring\\rentACar",
+  "node.version": "v20.9.0",
+  "node.download.root": "https://nodejs.org/dist/",
+  "frontendFolder": "C:\\CampSpring\\rentACar\\frontend",
+  "connect.javaSourceFolder": "C:\\CampSpring\\rentACar\\src\\main\\java",
+  "javaResourceFolder": "C:\\CampSpring\\rentACar\\src\\main\\resources",
+  "connect.applicationProperties": "C:\\CampSpring\\rentACar\\src\\main\\resources\\application.properties",
+  "connect.openApiFile": "C:\\CampSpring\\rentACar\\target\\generated-resources\\openapi.json",
+  "project.frontend.generated": "C:\\CampSpring\\rentACar\\frontend\\generated",
+  "pnpm.enable": false,
+  "require.home.node": false,
+  "build.folder": "target"
+}
