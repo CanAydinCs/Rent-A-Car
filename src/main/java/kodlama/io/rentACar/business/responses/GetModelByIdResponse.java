@@ -1,5 +1,6 @@
 package kodlama.io.rentACar.business.responses;
 
+import kodlama.io.rentACar.entities.concretes.Brand;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,14 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllModelsResponse {
+public class GetModelByIdResponse {
     private int id;
+    private Brand brand;
     private String name;
-    private String brandName;
-
-    @Override
-    public String toString()
-    {
-        return String.format("%d : %s : %s", id, brandName, name);
-    }
 }

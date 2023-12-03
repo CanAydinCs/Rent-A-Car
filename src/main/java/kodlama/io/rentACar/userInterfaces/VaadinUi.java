@@ -5,10 +5,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import kodlama.io.rentACar.business.requests.CreateBrandRequest;
+import kodlama.io.rentACar.business.requests.CreateModelRequest;
 import kodlama.io.rentACar.business.requests.DeleteBrandByIdRequest;
+import kodlama.io.rentACar.business.requests.DeleteModelByIdRequest;
 import kodlama.io.rentACar.business.requests.UpdateBrandRequest;
+import kodlama.io.rentACar.business.requests.UpdateModelRequest;
 import kodlama.io.rentACar.business.responses.GetAllBrandsResponse;
+import kodlama.io.rentACar.business.responses.GetAllModelsResponse;
 import kodlama.io.rentACar.webApi.Controllers.BrandsController;
+import kodlama.io.rentACar.webApi.Controllers.ModelsController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +29,9 @@ public class VaadinUi extends VerticalLayout {
 
     @Autowired
     private BrandsController brandC;
+
+    @Autowired
+    private ModelsController modelC;
 
     private Component layoutToRemove;
 
@@ -41,12 +49,71 @@ public class VaadinUi extends VerticalLayout {
         Button brandsButton = new Button("Brands Section", event -> {
             AddTempLayout(BrandsUi());
         });
+
+        Button modelsButton = new Button("Models Section", event -> {
+            AddTempLayout(ModelsUi());
+        });
         
         Button btnHideAll = new Button("Hide All", event -> {
             HideAll();
         });
 
-        HorizontalLayout layout = DefHor(btnTestShower, brandsButton, btnHideAll);
+        HorizontalLayout layout = DefHor(btnTestShower, brandsButton, modelsButton, btnHideAll);
+
+        return layout;
+    }
+
+    private Component ModelsUi(){
+        TextArea allModelsOutput = new TextArea();
+        allModelsOutput.setReadOnly(true);
+        Button getAllButton = new Button("Get All Models", event -> {
+            allModelsOutput.setValue("");
+            StringBuilder modelOutputBuilder = new StringBuilder(allModelsOutput.getValue());
+            for (GetAllModelsResponse response : modelC.getAll()) {
+                modelOutputBuilder.append("\n").append(response.toString());
+            }
+            allModelsOutput.setValue(modelOutputBuilder.toString());
+        });
+
+        VerticalLayout l1 = DefVer(allModelsOutput, getAllButton);
+
+        TextField createModelInput = new TextField("Enter Model Name");
+        TextField createModelBrand = new TextField("Enter Brand ID");
+        Button createModelButton = new Button("Create Model", event -> {
+            CreateModelRequest request = new CreateModelRequest(createModelInput.getValue(),Integer.parseInt(createModelBrand.getValue()));
+            modelC.add(request);
+            Notification.show("Model created");
+        });
+
+        VerticalLayout l2 = DefVer(createModelInput, createModelBrand, createModelButton);
+
+        TextField deleteModelId = new TextField("Enter Model ID");
+        Button deleteModelByIdButton = new Button("Delete", event -> {
+            modelC.delete(new DeleteModelByIdRequest(Integer.parseInt(deleteModelId.getValue())));
+            Notification.show("Model Deleted");
+        });
+
+        VerticalLayout l3 = DefVer(deleteModelId, deleteModelByIdButton);
+
+        TextField updateModelId = new TextField("Enter ID");
+        TextField updateModelName = new TextField("Enter New Name");
+        TextField updateModelBrand = new TextField("Enter New Brand ID");
+        Button updateModelByIdButton = new Button("Update", event -> {
+            UpdateModelRequest request = new UpdateModelRequest(
+                Integer.parseInt(updateModelId.getValue()), 
+                updateModelName.getValue(),
+                Integer.parseInt(updateModelBrand.getValue()));
+
+            modelC.update(request);
+
+            Notification.show("Model succesfuly updated");
+        });
+
+        VerticalLayout l4 = new VerticalLayout(updateModelId, updateModelName, updateModelBrand, updateModelByIdButton);
+
+
+
+        HorizontalLayout layout = DefHor(l1, l2, l3, l4);
 
         return layout;
     }
@@ -65,15 +132,15 @@ public class VaadinUi extends VerticalLayout {
 
         VerticalLayout l1 = DefVer(allBrandOutput, getAllButton);
 
-        TextField createBrandInput = new TextField();
+        TextField createBrandInput = new TextField("Enter Brand Name");
         Button createBrandButton = new Button("Create Brand", event -> {
             brandC.add(new CreateBrandRequest(createBrandInput.getValue()));
             Notification.show("Brand created");
         });
 
-        VerticalLayout l2 = DefVer(createBrandButton, createBrandButton);
+        VerticalLayout l2 = DefVer(createBrandInput, createBrandButton);
 
-        TextField deleteBrandId = new TextField();
+        TextField deleteBrandId = new TextField("Enter Brand ID");
         Button deleteBrandByIdButton = new Button("Delete", event -> {
             brandC.delete(new DeleteBrandByIdRequest(Integer.parseInt(deleteBrandId.getValue())));
             Notification.show("Brand Deleted");
