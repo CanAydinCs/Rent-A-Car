@@ -23,17 +23,14 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-@Route("")
-public class VaadinUi extends VerticalLayout {
+@Route("/old")
+public class VaadinUi extends Tools {
     private HorizontalLayout baseLine;
 
     @Autowired
-    private BrandsController brandC;
-
+    private BrandsController brandController;
     @Autowired
-    private ModelsController modelC;
-
-    private Component layoutToRemove;
+    private ModelsController modelController;
 
     public VaadinUi() {
         baseLine = BaseLineCreator();
@@ -42,6 +39,9 @@ public class VaadinUi extends VerticalLayout {
     }
 
     private HorizontalLayout BaseLineCreator(){
+        Button btnGoToTest = BtnDirector("Go To Test Page", testUi.class);
+        Button btnGoToMain = BtnDirector("Go To Main Page", mainPage.class);
+
         Button btnTestShower = new Button("Show Test Ui", event -> {
             AddTempLayout(TestUi());
         }); 
@@ -58,7 +58,7 @@ public class VaadinUi extends VerticalLayout {
             HideAll();
         });
 
-        HorizontalLayout layout = DefHor(btnTestShower, brandsButton, modelsButton, btnHideAll);
+        HorizontalLayout layout = DefHor(btnGoToTest, btnGoToMain, btnTestShower, brandsButton, modelsButton, btnHideAll);
 
         return layout;
     }
@@ -69,7 +69,7 @@ public class VaadinUi extends VerticalLayout {
         Button getAllButton = new Button("Get All Models", event -> {
             allModelsOutput.setValue("");
             StringBuilder modelOutputBuilder = new StringBuilder(allModelsOutput.getValue());
-            for (GetAllModelsResponse response : modelC.getAll()) {
+            for (GetAllModelsResponse response : modelController.getAll()) {
                 modelOutputBuilder.append("\n").append(response.toString());
             }
             allModelsOutput.setValue(modelOutputBuilder.toString());
@@ -81,7 +81,7 @@ public class VaadinUi extends VerticalLayout {
         TextField createModelBrand = new TextField("Enter Brand ID");
         Button createModelButton = new Button("Create Model", event -> {
             CreateModelRequest request = new CreateModelRequest(createModelInput.getValue(),Integer.parseInt(createModelBrand.getValue()));
-            modelC.add(request);
+            modelController.add(request);
             Notification.show("Model created");
         });
 
@@ -89,7 +89,7 @@ public class VaadinUi extends VerticalLayout {
 
         TextField deleteModelId = new TextField("Enter Model ID");
         Button deleteModelByIdButton = new Button("Delete", event -> {
-            modelC.delete(new DeleteModelByIdRequest(Integer.parseInt(deleteModelId.getValue())));
+            modelController.delete(new DeleteModelByIdRequest(Integer.parseInt(deleteModelId.getValue())));
             Notification.show("Model Deleted");
         });
 
@@ -104,7 +104,7 @@ public class VaadinUi extends VerticalLayout {
                 updateModelName.getValue(),
                 Integer.parseInt(updateModelBrand.getValue()));
 
-            modelC.update(request);
+            modelController.update(request);
 
             Notification.show("Model succesfuly updated");
         });
@@ -124,7 +124,7 @@ public class VaadinUi extends VerticalLayout {
         Button getAllButton = new Button("Get All Brands", event -> {
             allBrandOutput.setValue("");
             StringBuilder brandOutputBuilder = new StringBuilder(allBrandOutput.getValue());
-            for (GetAllBrandsResponse response : brandC.getAll()) {
+            for (GetAllBrandsResponse response : brandController.getAll()) {
                 brandOutputBuilder.append("\n").append(response.getString());
             }
             allBrandOutput.setValue(brandOutputBuilder.toString());
@@ -134,7 +134,7 @@ public class VaadinUi extends VerticalLayout {
 
         TextField createBrandInput = new TextField("Enter Brand Name");
         Button createBrandButton = new Button("Create Brand", event -> {
-            brandC.add(new CreateBrandRequest(createBrandInput.getValue()));
+            brandController.add(new CreateBrandRequest(createBrandInput.getValue()));
             Notification.show("Brand created");
         });
 
@@ -142,7 +142,7 @@ public class VaadinUi extends VerticalLayout {
 
         TextField deleteBrandId = new TextField("Enter Brand ID");
         Button deleteBrandByIdButton = new Button("Delete", event -> {
-            brandC.delete(new DeleteBrandByIdRequest(Integer.parseInt(deleteBrandId.getValue())));
+            brandController.delete(new DeleteBrandByIdRequest(Integer.parseInt(deleteBrandId.getValue())));
             Notification.show("Brand Deleted");
         });
 
@@ -153,7 +153,7 @@ public class VaadinUi extends VerticalLayout {
         Button updateBrandByIdButton = new Button("Update", event -> {
             UpdateBrandRequest request = new UpdateBrandRequest(Integer.parseInt(updateBrandId.getValue()), updateBrandName.getValue());
 
-            brandC.update(request);
+            brandController.update(request);
 
             Notification.show("Brand succesfuly updated");
         });
@@ -180,38 +180,6 @@ public class VaadinUi extends VerticalLayout {
 
         VerticalLayout layout = DefVer(inputField, outputField, submit);
         
-        return layout;
-    }
-
-    private void AddTempLayout(Component layout){
-        HideAll();
-
-        layoutToRemove = layout;
-        add(layoutToRemove);
-    }
-
-    private void HideAll(){
-        if(layoutToRemove != null)
-        {
-            remove(layoutToRemove);
-        }
-    }
-
-    private VerticalLayout DefVer(Component... comps){
-        VerticalLayout layout = new VerticalLayout(comps);
-        layout.setSizeFull();
-        layout.setJustifyContentMode(JustifyContentMode.CENTER);
-        layout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-
-        return layout;
-    }
-
-    private HorizontalLayout DefHor(Component... comps){
-        HorizontalLayout layout = new HorizontalLayout(comps);
-        layout.setSizeFull();
-        layout.setJustifyContentMode(JustifyContentMode.CENTER);
-        layout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-
         return layout;
     }
 }
